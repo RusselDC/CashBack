@@ -1,18 +1,13 @@
-import {Controller, Control, FieldValues, FieldErrors} from "react-hook-form"
+import {Controller} from "react-hook-form"
 import { IconButton, InputAdornment, TextField } from "@mui/material";
-import { FormFields } from "../../../types/form-generator";
 import React from "react";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { TextProps } from "../../../types/form-generator";
 
 
-interface Text extends FormFields
-{
-    control : Control<FieldValues>;
-    errors : FieldErrors<{ [x: string]: unknown; }>
-}
 
-const Text = ({id, label, style, control, errors} : Text) => {
+const Text = ({id, label, style, control, errors} : TextProps) => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false)
     
     
@@ -21,9 +16,6 @@ const Text = ({id, label, style, control, errors} : Text) => {
     name={id}
     control={control}
     defaultValue=""
-    rules={{
-        required: `${label} is required`,
-    }}
     render={({ field }) => (
         <TextField
             {...field}

@@ -3,6 +3,8 @@ import { FormFields, FormConfigs } from "./form-generator"
 import { ObjectSchema } from "yup"
 
 export type FormContextType = {
+    setRequestError : Dispatch<SetStateAction<string>>
+    requestError : string
     selectedForm : FormConfigs
     formPass : boolean
     setForm : Dispatch<SetStateAction<string>>
@@ -11,7 +13,6 @@ export type FormContextType = {
     formErrors : {[key:string ] : ValidationError}
     setFormErrors: Dispatch<SetStateAction<{[key:string] : string}>>
     generateYupSchema : (data : FormFields[]) => ObjectSchema<Record<string, unknown>>
-
 }
 
 
