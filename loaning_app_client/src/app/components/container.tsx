@@ -1,7 +1,7 @@
 import { CssBaseline, Container as MuiContainer, Box, Typography } from "@mui/material";
 import { subColor } from "../constants/common";
 import { appName } from "../constants/common-labels";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom" ;
 
 const Container = () => {
     return <>
@@ -20,12 +20,16 @@ const Container = () => {
                 width:"40%",
                 padding:0,
                 margin:0,
+                display:"flex",
+                flexDirection:"column",
+                alignItems:"center",
+                justifyContent:"center"
                
             }}>
-                <Box sx={{height:"30%",
+                <Box sx={{height:"20%",
                      width:"100%", 
                      display:"flex",
-                     justifyContent:"center",
+                     paddingLeft:"26%",
                      paddingTop:"20%",
                      
                 }}>
@@ -36,10 +40,10 @@ const Container = () => {
                     width:"100%",
                     display:"flex",
                     justifyContent:"center",
-
                     padding:0,
                     margin:0,
                 }}>
+                    
                     <Outlet/>
                 </Box>
 

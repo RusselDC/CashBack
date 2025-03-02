@@ -5,3 +5,9 @@ export interface ExceptionRespose {
         }
     }
 }
+
+export interface Response {
+    data : {
+        data : string
+    }
+}

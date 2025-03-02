@@ -1,14 +1,14 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from models import Base
+from sqlalchemy import String, Integer, ForeignKey, DateTime, Boolean
+from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
-
-
+from models import Base
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    email = Column(String(100), unique=True, nullable=False)
-    password  = Column(String(255), nullable=False)
-    is_admin = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.now)
     
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)   
+    password: Mapped[str] = mapped_column(String(255), nullable=False)
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow) 
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 

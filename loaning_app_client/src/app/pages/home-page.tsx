@@ -1,20 +1,28 @@
 
-import { Box, Button} from "@mui/material"
+import { Box, Button, Divider, Typography} from "@mui/material"
 import {useForm as useFormGen} from "../hooks/useFormGen"
 import { useRef } from "react"
 import DynamicForm from "../utils/form-generator/dynamic-form"
 import React from "react"
 import {IButtons} from "../types/buttons"
 import { enqueueSnackbar } from "notistack"
-import { ExceptionRespose } from "../types/response"
+import { ExceptionRespose, Response } from "../types/response"
+import { setAuth } from "../store/slices/AuthSlice"
+import { useDispatch } from "react-redux"
+import { appDispatch } from "../store/app-store"
+import { useNavigate } from "react-router-dom"
+
 
 
 
 
 const HomePage = () => {
     const {setForm, selectedForm} = useFormGen()
-    const formRef = useRef<HTMLFormElement | null>(null)
+    const dispatch: appDispatch = useDispatch()
+    const navigate = useNavigate()
 
+
+    const formRef = useRef<HTMLFormElement | null>(null)
 
     React.useEffect(() => {
         setForm('login_form')
@@ -22,7 +30,12 @@ const HomePage = () => {
 
    const onSubmit = async (data : Record<string,unknown>) => {
         const response = await selectedForm.onSubmit(data)
-        if(response.status === 200) return enqueueSnackbar("Logged In", { variant: "success", autoHideDuration:3000 })
+        console.log(response)
+        if(response.status === 200) 
+        {
+            dispatch(setAuth((response as Response).data.data))
+            navigate('/user/dashboard')
+        }
         return enqueueSnackbar((response as ExceptionRespose).response?.data?.detail, {variant : "error", autoHideDuration:3000})
    }
 
@@ -35,6 +48,12 @@ const HomePage = () => {
     }
    ]
 
+   const registerButton: IButtons = {
+    title: "Register Here",
+    variant : "outlined",
+    color: "secondary",
+    onClick: () => alert("Hello World")
+   }
 
    
 
@@ -49,6 +68,14 @@ const HomePage = () => {
             ))
         }
         </Box>
+       <Divider sx={{marginTop:"17%"}}>
+        <Typography variant="body1">or</Typography>
+       </Divider>
+       <Box sx={{height:"auto",width:"100%", position:"relative", marginTop:"9%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+        <Button sx={{position:"absolute"}} {...registerButton}>{registerButton.title}</Button>
+       </Box>
+
+       
         
     </Box>
 }

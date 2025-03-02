@@ -2,8 +2,8 @@ from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from domain.service_response import ServiceResponse
 from domain.forms.login import LoginForm
+from domain.forms.register import RegisterForm
 from controllers.AuthController import AuthController
-import json
 
 
 app = FastAPI()
@@ -17,19 +17,23 @@ app.add_middleware(
 )
 
 @app.post("/register")
-async def home(loginForm : LoginForm) -> ServiceResponse: 
+async def home(registerForm : RegisterForm) -> ServiceResponse: 
     try:
-        new_user = AuthController().register(loginForm.email, loginForm.password)
-        return ServiceResponse(message=str(new_user))
+        new_user = AuthController().register(registerForm)
+        return ServiceResponse(data={'email' : new_user}, message="User has been created")
+    
     except Exception as e:
-        return HTTPException(status_code=500, detail=e)
+        raise HTTPException(status_code=500, detail=str(e))
     
 @app.post("/auth")
 async def login(loginForm: LoginForm) -> ServiceResponse:
     try:
         login = AuthController().auth(loginForm.email, loginForm.password)
-        return ServiceResponse(data=str(login))  
+        return ServiceResponse(data=login)
     except HTTPException as e:
         raise e  
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e), message="Logged In")  
+    
+    
+    
