@@ -27,8 +27,7 @@ const RegisterPage = () => {
     const formWidth = ["50%","50%","50%"]
 
     const submit = (data : Record<string,unknown>) => {
-      console.log(data)
-        if(step < 4) selectedForm.onSubmit(data, setStep, setFormDatas)
+      if(step < 3) selectedForm.onSubmit(data, setStep, setFormDatas)
     }
 
     const registerForms = React.useMemo(() => [
