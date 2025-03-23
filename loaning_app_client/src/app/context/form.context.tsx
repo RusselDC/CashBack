@@ -10,9 +10,11 @@ const FormProvider = ({children} : {children: ReactNode}) => {
 
     const [formPass, setFormPass] = useState(false)
     const [Form, setForm] = useState<string>('')
+    const [formDatas, setFormDatas] = useState<Record<string,unknown>>({})
     const [formErrors, setFormErrors] = useState<string | null>(null)
     const [requestError, setRequestError] = useState<{[key:string] : string}>({})
     const [selectedForm, setSelectedForm] = useState<FormConfigs<string>>({} as FormConfigs<string>)
+    const [dropdownValue, setDropdownValue] = useState<Record<string,string>>({})
 
     const generateYupSchema = (data: FormFields[]) => {
         const shape = data?.reduce((acc : Record<string,AnySchema>, current:FormFields) => {
@@ -28,6 +30,10 @@ const FormProvider = ({children} : {children: ReactNode}) => {
     },[Form])
 
     const values = {
+        dropdownValue,
+        setDropdownValue,
+        setFormDatas,
+        formDatas,
         setRequestError,
         requestError,
         selectedForm,

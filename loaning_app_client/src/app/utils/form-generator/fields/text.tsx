@@ -7,41 +7,52 @@ import { TextProps } from "../../../types/form-generator";
 
 
 
-const Text = ({id, label, style, control, errors} : TextProps) => {
-    const [showPassword, setShowPassword] = React.useState<boolean>(false)
-    
-    
-   
-    return <Controller
-    name={id}
-    control={control}
-    defaultValue=""
-    render={({ field }) => (
-        <TextField
-            {...field}
-            id="standard-basic"
-            label={label}
-            variant="standard"
-            fullWidth
-            error={!!errors[id]}
-            helperText={errors[id]?.message}
-            type={id === "password" ? showPassword ? "text" : "password" : "text"}
-            sx={{...style}}
-        InputProps={{
-            endAdornment: id === "password" ? (
-                <InputAdornment position="end">
-                    <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => setShowPassword((previous) => !previous)}
-                    >
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon/>}
-                    </IconButton>
-                </InputAdornment>
-            ) : null
-        }}
+const Text = ({ id, label, style, control, errors }: TextProps) => {
+    const [showPassword, setShowPassword] = React.useState<boolean>(false);
+
+    return (
+        <Controller
+            name={id}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+                <TextField
+                    {...field}
+                    id="standard-basic"
+                    label={label}
+                    variant="standard"
+                    fullWidth
+                    error={!!errors[id]}
+                    helperText={errors[id]?.message as string}
+                    type={
+                        id === "password" || id === "confirm_password"
+                            ? showPassword
+                                ? "text"
+                                : "password"
+                            : "text"
+                    }
+                    sx={{ ...style }}
+                    InputProps={{
+                        ...(id === "password" || id === "confirm_password"
+                            ? {
+                                  endAdornment: (
+                                      <InputAdornment position="end">
+                                          <IconButton
+                                              aria-label="toggle password visibility"
+                                              onClick={() => setShowPassword((prev) => !prev)}
+                                          >
+                                              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                          </IconButton>
+                                      </InputAdornment>
+                                  ),
+                              }
+                            : {}),
+                    }}
+                />
+            )}
         />
-    )}
-/>
-}
+    );
+};
+
 
 export default Text

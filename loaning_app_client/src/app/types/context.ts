@@ -3,6 +3,10 @@ import { FormFields, FormConfigs } from "./form-generator"
 import { ObjectSchema } from "yup"
 
 export type FormContextType = {
+    dropdownValue : Record<string,string>,
+    setDropdownValue : Dispatch<SetStateAction<Record<string,string>>>, 
+    setFormDatas : Dispatch<SetStateAction<Record<string,unknown>>>
+    formDatas : Record<string,unknown>
     setRequestError : Dispatch<SetStateAction<string>>
     requestError : string
     selectedForm : FormConfigs

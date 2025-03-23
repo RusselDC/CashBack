@@ -10,7 +10,7 @@ const currencyFormatter = (params: { value: { toLocaleString: () => unknown; }; 
 };
 
 const dueDatesRenderer = (params : GroupCellRendererParams | ITooltipParams) => {
-    return params.value.join(", ");  // You can format it however you want
+    return params.value.join(", "); 
 };
 
 const UserLoans = () => {

@@ -1,5 +1,11 @@
-import { ButtonProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
-export interface IButtons extends ButtonProps {
-    title : string
+
+
+export interface IButtons  {
+    title : string,
+    variant : string,
+    color : string,
+    sx?: SxProps<Theme>,
+    onClick : () => void
 }

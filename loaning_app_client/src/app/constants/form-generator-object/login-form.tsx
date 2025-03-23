@@ -1,6 +1,6 @@
 import * as Yup from "yup"
 import { FormConfigs, FormFields } from "../../types/form-generator"
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 
 
 const LoginFields: FormFields[] = [
@@ -9,18 +9,20 @@ const LoginFields: FormFields[] = [
     label : 'Email',
     validation : Yup.string().email("Invalid Email").required("Email is required"),
     component : 'text',
-    style:{marginBottom: '10px'}
+    style:{marginBottom: '10px'},
+    width : 12
 },
 {
     id : 'password',
     label : 'Password',
     validation : Yup.string().required("Password is required"),
     component : 'text',
-    style:{marginBottom: '10px'}
+    style:{marginBottom: '10px'},
+    width : 12
 }
 ]
 
-export const LoginConfig : FormConfigs<string> = {
+export const LoginConfig : FormConfigs<string, Promise<AxiosError | AxiosResponse>> = {
 form_id : 'login_form',
 fields : LoginFields,
 onSubmit: async (data) => {

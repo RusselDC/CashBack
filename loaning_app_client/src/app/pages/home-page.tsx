@@ -11,13 +11,14 @@ import { setAuth } from "../store/slices/AuthSlice"
 import { useDispatch } from "react-redux"
 import { appDispatch } from "../store/app-store"
 import { useNavigate } from "react-router-dom"
+import { AxiosResponse } from "axios"
 
 
 
 
 
 const HomePage = () => {
-    const {setForm, selectedForm} = useFormGen()
+    const {setForm, selectedForm, formDatas, setFormDatas} = useFormGen()
     const dispatch: appDispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -29,15 +30,18 @@ const HomePage = () => {
     },[setForm])
 
    const onSubmit = async (data : Record<string,unknown>) => {
-        const response = await selectedForm.onSubmit(data)
-        console.log(response)
-        if(response.status === 200) 
+        
+        setFormDatas((prev: Record<string, unknown>) => ({...prev, ...data}))
+        const response = await selectedForm.onSubmit(formDatas)
+        if((response as AxiosResponse).status === 200) 
         {
             dispatch(setAuth((response as Response).data.data))
-            navigate('/user/dashboard')
+            return navigate('/user/dashboard')
         }
         return enqueueSnackbar((response as ExceptionRespose).response?.data?.detail, {variant : "error", autoHideDuration:3000})
    }
+
+   
 
    const buttons: IButtons[] = [
     {
@@ -52,7 +56,7 @@ const HomePage = () => {
     title: "Register Here",
     variant : "outlined",
     color: "secondary",
-    onClick: () => alert("Hello World")
+    onClick: () => navigate("/register")
    }
 
    

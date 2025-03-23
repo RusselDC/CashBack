@@ -2,7 +2,6 @@ import { Grid2 } from "@mui/material";
 import { Box } from "@mui/system";
 import CardComponent from "../../components/card";
 
-
 const UserHome = () => {
 
     const dashbaoardData = [

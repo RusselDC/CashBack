@@ -5,6 +5,7 @@ import HomeContainer from "./components/HomeContainer"
 import UserHome from "./pages/user/UserHome"
 import { AuthRoute, PublicRoutes } from "./utils/route-guard"
 import UserLoans from "./pages/user/Userloans"
+import RegisterPage from "./pages/register"
 
 
 const Routings = () => {
@@ -13,6 +14,7 @@ const Routings = () => {
                 <Route element={<Container/>}>
                     <Route path="/" element={<HomePage/>}/>
                 </Route>
+                <Route path="/register" element={<RegisterPage/>}/>
             </Route>
             <Route element={<AuthRoute/>}>
                 <Route element={<HomeContainer/>} path="/user">
