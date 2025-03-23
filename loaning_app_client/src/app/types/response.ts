@@ -1,13 +1,13 @@
 export interface ExceptionRespose {
-    response : {
-        data : {
-            detail : string
-        }
-    }
+  response: {
+    data: {
+      detail: string;
+    };
+  };
 }
 
 export interface Response {
-    data : {
-        data : string
-    }
+  data: {
+    data: string;
+  };
 }

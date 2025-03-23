@@ -3,7 +3,7 @@ import DatePicker from "./date-picker";
 import Text from "./text";
 
 export const fieldMap = {
-    'text' : Text,
-    'date' : DatePicker,
-    'dropdown' : Dropdown
-}
+  text: Text,
+  date: DatePicker,
+  dropdown: Dropdown,
+};

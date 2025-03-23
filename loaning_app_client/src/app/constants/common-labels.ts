@@ -1,1 +1,1 @@
-export const appName = "CashBack"
+export const appName = "CashBack";

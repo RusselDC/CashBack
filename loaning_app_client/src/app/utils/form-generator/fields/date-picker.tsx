@@ -12,14 +12,23 @@ const DatePicker = ({ id, label, style, control, errors }: DatePickerProps) => {
       render={({ field }) => (
         <MUIDatePicker
           {...field}
-          value={field.value ? dayjs(field.value) : null} 
+          value={field.value ? dayjs(field.value) : null}
           onChange={(newValue) => {
-            const formattedDate = newValue ? dayjs(newValue).format("YYYY-MM-DD") : "";
-            field.onChange(formattedDate); 
+            const formattedDate = newValue
+              ? dayjs(newValue).format("YYYY-MM-DD")
+              : "";
+            field.onChange(formattedDate);
           }}
-          sx={{...style}}
+          sx={{ ...style }}
           label={label}
-          slotProps={{ textField: { variant: "standard", fullWidth: true, error:!!errors[id], helperText: errors[id]?.message as string} }}
+          slotProps={{
+            textField: {
+              variant: "standard",
+              fullWidth: true,
+              error: !!errors[id],
+              helperText: errors[id]?.message as string,
+            },
+          }}
         />
       )}
     />

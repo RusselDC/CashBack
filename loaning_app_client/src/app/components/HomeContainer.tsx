@@ -1,15 +1,17 @@
-
-import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import CreditScoreIcon from '@mui/icons-material/CreditScore';
-import { AppProvider, Session, type Navigation } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { Outlet } from 'react-router-dom';
-import React from 'react';
-import { destroyAuth } from '../store/slices/AuthSlice';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
+import { createTheme } from "@mui/material/styles";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import {
+  AppProvider,
+  Session,
+  type Navigation,
+} from "@toolpad/core/AppProvider";
+import { DashboardLayout } from "@toolpad/core/DashboardLayout";
+import { Outlet } from "react-router-dom";
+import React from "react";
+import { destroyAuth } from "../store/slices/AuthSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 /*
 {
@@ -46,26 +48,24 @@ import { useDispatch } from 'react-redux';
 
 const NAVIGATION: Navigation = [
   {
-    kind: 'header',
-    title: 'Main items',
+    kind: "header",
+    title: "Main items",
   },
   {
-    segment: 'user/dashboard',
-    title: 'Dashboard',
+    segment: "user/dashboard",
+    title: "Dashboard",
     icon: <DashboardIcon />,
   },
   {
-    segment: 'user/loans',
-    title: 'Loans',
+    segment: "user/loans",
+    title: "Loans",
     icon: <CreditScoreIcon />,
   },
-  
-  
 ];
 
 const demoTheme = createTheme({
   cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
+    colorSchemeSelector: "data-toolpad-color-scheme",
   },
   breakpoints: {
     values: {
@@ -78,22 +78,20 @@ const demoTheme = createTheme({
   },
 });
 
-
-
 interface DemoProps {
   window?: () => Window;
 }
 
 export default function DashboardLayoutBasic(props: DemoProps) {
   const { window } = props;
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [session, setSession] = React.useState<Session | null>({
     user: {
-      name: 'Bharat Kashyap',
-      email: 'bharatkashyap@outlook.com',
-      image: 'https://avatars.githubusercontent.com/u/19550456',
+      name: "Bharat Kashyap",
+      email: "bharatkashyap@outlook.com",
+      image: "https://avatars.githubusercontent.com/u/19550456",
     },
   });
 
@@ -102,23 +100,18 @@ export default function DashboardLayoutBasic(props: DemoProps) {
       signIn: () => {
         setSession({
           user: {
-            name: 'Bharat Kashyap',
-            email: 'bharatkashyap@outlook.com',
-            image: 'https://avatars.githubusercontent.com/u/19550456',
+            name: "Bharat Kashyap",
+            email: "bharatkashyap@outlook.com",
+            image: "https://avatars.githubusercontent.com/u/19550456",
           },
         });
       },
       signOut: () => {
-        
-
-        navigate("/")
-        dispatch(destroyAuth())
-        
-
+        navigate("/");
+        dispatch(destroyAuth());
       },
     };
   }, [dispatch, navigate]);
-
 
   const demoWindow = window !== undefined ? window() : undefined;
 
@@ -130,13 +123,13 @@ export default function DashboardLayoutBasic(props: DemoProps) {
       theme={demoTheme}
       window={demoWindow}
       branding={{
-        logo : '',
-        title : "CashBack",
-        homeUrl : "/user/dashboard"
+        logo: "",
+        title: "CashBack",
+        homeUrl: "/user/dashboard",
       }}
     >
       <DashboardLayout>
-        <Outlet/>
+        <Outlet />
       </DashboardLayout>
     </AppProvider>
   );
