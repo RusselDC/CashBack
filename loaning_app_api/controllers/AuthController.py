@@ -1,16 +1,14 @@
 
 from models.User import User
 from fastapi import HTTPException
-from config.database import session
+from core.database.base_class import session
 from models.User import User
 from sqlalchemy.exc import SQLAlchemyError 
 from utils.string import String
 from utils.auth_utils import AuthUtils
 from domain.forms.register import RegisterForm
-from models.Lender import Lender
-from models.LenderAddress import LenderAddress
-
-
+from models import Borrower
+from models import BorrowerAddress
 class AuthController:
     def register(self, form : RegisterForm):
         try:
@@ -24,7 +22,7 @@ class AuthController:
            
             session.add(new_user)
             session.flush()  
-            new_lender = Lender(
+            new_lender = Borrower(
                 user_id=new_user.id,
                 first_name=form.first_name,
                 middle_name=form.middle_name,
@@ -34,7 +32,7 @@ class AuthController:
             
             session.add(new_lender)
             session.flush()  
-            lender_address = LenderAddress(
+            lender_address = BorrowerAddress(
                 borrowers_id=new_lender.id,
                 state=form.state,
                 city=form.city,
@@ -44,16 +42,13 @@ class AuthController:
             )
             session.add(lender_address)
             session.commit()
-            print(f"✅ User registered successfully: {new_user.email}")
             return new_user.email
         except SQLAlchemyError as e:
             session.rollback() 
-            print(f"❌ Database error occurred: {e}")
             raise HTTPException(status_code=500, detail="Database error occurred")
 
         except Exception as e:
             session.rollback()
-            print(f"❌ Unexpected error: {e}")
             raise HTTPException(status_code=500, detail=str(e))
 
    

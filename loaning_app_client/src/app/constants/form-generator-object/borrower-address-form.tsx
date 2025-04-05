@@ -14,7 +14,7 @@ const BorrowerAddress: FormFields[] = [
   },
   {
     id: "cities",
-    label: "cities",
+    label: "Cities",
     parentAddress: "provinceDD",
     objectAddress: "citiesDD",
     validation: Yup.string().required("City is required"),
@@ -22,6 +22,29 @@ const BorrowerAddress: FormFields[] = [
     apiId: "citiesApi",
     width: 12,
   },
+  {
+    id: "baranggays",
+    label: "Baranggay",
+    parentAddress: "citiesDD",
+    validation: Yup.string().required("Baranggay is required"),
+    component: "dropdown",
+    apiId: "baranggaysApi",
+    width: 12,
+  },
+  {
+    id : "houseNumber",
+    label : "House Number",
+    component : "text",
+    width : 12,
+    validation : Yup.number().label("House Number").typeError(({label, value}) => `${label} must be a ${value}`).required(),
+  },
+  {
+    id : "landMark",
+    label : "Land Mark",
+    component : "text",
+    width : 12,
+    validation : Yup.string().notRequired()
+  }
 ];
 
 export const BorrowerAddressConfig: FormConfigs<string, unknown> = {

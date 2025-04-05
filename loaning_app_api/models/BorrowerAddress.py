@@ -1,10 +1,8 @@
 from sqlalchemy import ForeignKey, String, Integer
-from models import Base
+from core.database import Base
 from sqlalchemy.orm import mapped_column, Mapped
 
-class LenderAddress(Base):
-    __tablename__ = "borrower_address"
-    
+class BorrowerAddress(Base):
     id : Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, unique=True)
     borrowers_id : Mapped[int] = mapped_column(Integer, ForeignKey('borrowers.id', ondelete="CASCADE", onupdate="NO ACTION"), nullable=False)
     state : Mapped[str] = mapped_column(String(50), nullable=False)

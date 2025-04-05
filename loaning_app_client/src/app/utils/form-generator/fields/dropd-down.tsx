@@ -6,6 +6,8 @@ import {
   FormHelperText,
   FormControl,
   InputLabel,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import React from "react";
 import { useForm } from "../../../hooks/useFormGen";
@@ -23,69 +25,58 @@ const Dropdown = ({
   objectAddress,
 }: CustomDropdownProps) => {
   const { dropdownValue, setDropdownValue } = useForm();
-  const [options, setOptions] = React.useState<Record<string, string>>({});
+  const [options, setOptions] = React.useState<Record<string, string>[]>([]);
+  const parentValue = dropdownValue[parentAddress as keyof typeof dropdownValue];
 
   React.useEffect(() => {
     if (dropdownOpts) {
-      setOptions(dropdownOpts as Record<string, string>);
+      setOptions(dropdownOpts as Record<string, string>[]);
     } else {
-      const parentValue =
-        dropdownValue[parentAddress as keyof typeof dropdownValue];
       if (parentValue) {
         (async () => {
           const dropdownValues = dropdownApi[apiId as keyof typeof dropdownApi];
           const values = await dropdownValues(parentValue);
-          setOptions(values as unknown as Record<string, string>);
+          setOptions(values as unknown as Record<string, string>[]);
         })();
       }
     }
-  }, [apiId, dropdownOpts, dropdownValue, parentAddress]);
+  }, [parentValue]);
+
+
 
   return (
     <Controller
       name={id}
       control={control}
       render={({ field }) => (
-        <FormControl error={!!errors[id]} fullWidth={true}>
-          <InputLabel id={`${label}-label`}>{label}</InputLabel>
-          <Select
-            value={dropdownValue[objectAddress as keyof typeof dropdownValue]}
-            labelId={`${label}-label`}
-            id={`${label}-dropdown`}
+       <Autocomplete 
+        id={id}
+        options={options}
+        disablePortal
+        onChange={(_, newValue) => {
+          field.onChange(newValue.label);
+          setDropdownValue((prev) => ({
+            ...prev,
+            [objectAddress as string]: newValue.value,
+          }));
+        }}
+        sx={{ ...style }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
             label={label}
-            onChange={(newValue) => {
-              field.onChange(newValue.target.value);
-              setDropdownValue((prev) => ({
-                ...prev,
-                [objectAddress as string]: newValue.target.value as string,
-              }));
-            }}
-            sx={{ ...style }}
-          >
-            {options ? (
-              Object.keys(options).map((key, index) => {
-                return (
-                  <MenuItem
-                    key={`${options?.[key]}-${index}`}
-                    value={options?.[key]}
-                  >
-                    {key}
-                  </MenuItem>
-                );
-              })
-            ) : (
-              <MenuItem>NO DATA</MenuItem>
-            )}
-          </Select>
-          {errors[id]?.message && (
-            <FormHelperText sx={{ color: "red" }}>
-              {errors[id]?.message}
-            </FormHelperText>
-          )}
-        </FormControl>
+            id={id}
+            error={!!errors[id]}
+            helperText={errors[id]?.message as string || ""}
+          />
+        )}
+       
+       />
       )}
     />
   );
 };
 
 export default Dropdown;
+
+

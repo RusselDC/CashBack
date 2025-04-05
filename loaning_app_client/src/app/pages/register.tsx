@@ -1,4 +1,4 @@
-import { Button, CssBaseline, Typography } from "@mui/material";
+import { Button, CssBaseline, Stack, Typography } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React from "react";
 import { Step, Stepper, StepLabel } from "@mui/material";
@@ -21,9 +21,6 @@ const RegisterPage = () => {
     "Address",
     "Review Inputs",
   ];
-
-  React.useEffect(() => console.log(formDatas), [formDatas]);
-
   const formWidth = ["50%", "50%", "50%"];
 
   const submit = (data: Record<string, unknown>) => {
@@ -47,20 +44,21 @@ const RegisterPage = () => {
 
   const buttons: IButtons[] = [
     {
-      title: step === 4 ? "Submit" : "Next",
-      variant: "contained",
-      color: "primary",
-      sx: { marginLeft: "10px" },
-      onClick: () => formRef.current?.requestSubmit(),
-    },
-    {
       title: "Back",
       variant: "contained",
       color: "primary",
       sx: { display: step === 0 ? "none" : "flex" },
       onClick: () => setStep((prev) => prev - 1),
     },
+    {
+      title: step === 3 ? "Submit" : "Next",
+      variant: "contained",
+      color: "primary",
+      onClick: () => step === 3 ? console.log(formDatas) : formRef.current?.requestSubmit(),
+    },
   ];
+
+
 
   return (
     <>
@@ -114,11 +112,6 @@ const RegisterPage = () => {
                     flexDirection: "row-reverse",
                   }}
                 >
-                  {buttons.map((button, key) => (
-                    <Button key={key} {...button}>
-                      {button.title}
-                    </Button>
-                  ))}
                 </Box>
               </>
             ) : (
@@ -134,44 +127,57 @@ const RegisterPage = () => {
               >
                 <Box>
                   {Object.keys(formDatas).map((key) => {
-                    return (
-                      <Box
-                        sx={{
-                          height: "auto",
-                          width: "auto",
-                        }}
-                      >
-                        <Typography>{prettifyString(key)} :</Typography>
-                      </Box>
-                    );
+                    if(!key.includes("password"))
+                    {
+                      return (
+                        <Box
+                          sx={{
+                            height: "auto",
+                            width: "auto",
+                          }}
+                        >
+                          <Typography>{prettifyString(key)} :</Typography>
+                        </Box>
+                      );
+                    }
                   })}
                 </Box>
                 <Box>
                   {Object.keys(formDatas).map((key) => {
-                    return (
-                      <Box
-                        sx={{
-                          height: "auto",
-                          width: "auto",
-                        }}
-                      >
-                        <Box sx={{ height: "auto", width: "auto" }}>
-                          <Typography>
-                            {(typeof formDatas[key] === "string" ||
-                              formDatas[key] instanceof Date) &&
-                            key.toLowerCase().includes("date")
-                              ? dayjs(formDatas[key]).isValid()
-                                ? dayjs(formDatas[key]).format("YYYY-MM-DD")
-                                : String(formDatas[key])
-                              : String(formDatas[key])}
-                          </Typography>
+                    if(!key.includes("password"))
+                    {
+                      return (
+                        <Box
+                          sx={{
+                            height: "auto",
+                            width: "auto",
+                          }}
+                        >
+                          <Box sx={{ height: "auto", width: "auto" }}>
+                            <Typography>
+                              {(typeof formDatas[key] === "string" ||
+                                formDatas[key] instanceof Date) &&
+                              key.toLowerCase().includes("date")
+                                ? dayjs(formDatas[key]).isValid()
+                                  ? dayjs(formDatas[key]).format("YYYY-MM-DD")
+                                  : String(formDatas[key])
+                                : String(formDatas[key])}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    );
+                      );
+                    }
                   })}
                 </Box>
               </Box>
             )}
+            <Stack flexDirection="row" gap={1} sx={{justifyContent : "flex-end", width:"100%"}}>
+            {buttons.map((button, key) => (
+              <Button key={key} {...button}>
+                {button.title}
+              </Button>
+            ))}
+            </Stack>
           </Box>
         </Container>
       </CssBaseline>

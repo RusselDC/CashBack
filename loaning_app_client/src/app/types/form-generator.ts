@@ -13,7 +13,7 @@ export type FormFields = {
   apiId?: string;
   objectAddress?: string;
   parentAddress?: string;
-  dropdownOpts?: Record<string, string>;
+  dropdownOpts?: Record<string, string>[];
 };
 
 export type FormConfigs<T = unknown, Z = unknown> = {
