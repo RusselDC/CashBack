@@ -8,7 +8,8 @@ import { useState } from "react"
 
 
 interface IUserContext {
-    user : User
+    user : User | null,
+    setUser : React.Dispatch<React.SetStateAction<User | null>>
 }
 
 interface Address {
@@ -20,7 +21,7 @@ interface Address {
 }
 
 interface User {
-    birth_date: string;  // If it's a string in the provided format, you can also use Date type if it's a Date object
+    birth_date: string;
     email: string;
     first_name: string;
     last_name: string;
@@ -33,43 +34,33 @@ export const Context = React.createContext<IUserContext | null>(null)
 
 const UserProvider = (props : {children : React.ReactNode}) => {
     const {children} = props
-    const [user, setUser] = useState<User>({
-        birth_date: "",
-        email: "",
-        first_name: "",
-        last_name: "",
-        middle_name: "",
-        address: {
-            city: "",
-            home_number: "",
-            land_mark: "",
-            province: "",
-            street: "",
-        },
-    })
+    const [user, setUser] = useState<User | null>(null)
     const userStore = useSelector((state : RootState) => state.authStore)
 
     React.useEffect(() => {
-        ( async() => {
-           try{
-                const authUser = await getUser(userStore.token as string)
-                
-                if(!authUser)
+        if(!user)
+        {
+            (async() => {
+                try{
+                    const authUser = await getUser(userStore.token as string)
+                    
+                    if(!authUser)
+                    {
+                        return enqueueSnackbar("Expired Token", {variant:"error",preventDuplicate: true})
+                    }
+                    setUser(authUser.data)
+                }catch(e)
                 {
-                    return enqueueSnackbar("Expired Token", {variant:"error",preventDuplicate: true})
+                    const error = e as AxiosError
+                    enqueueSnackbar(error.message, {variant:"error", preventDuplicate:true})
                 }
-                setUser(authUser.data)
-           }catch(e)
-           {
-                const error = e as AxiosError
-                enqueueSnackbar(error.message, {variant:"error", preventDuplicate:true})
-           }
             
-        })()
+            })()
+        }
     }, [])
 
 
-    return <Context.Provider value={{user}}>
+    return <Context.Provider value={{user, setUser}}>
         {children}
     </Context.Provider>
 
