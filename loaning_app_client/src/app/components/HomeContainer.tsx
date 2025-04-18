@@ -8,43 +8,13 @@ import {
 } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { Outlet } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import { destroyAuth } from "../store/slices/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import useUser from "../hooks/userUser";
 
-/*
-{
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
-  },
 
-*/
 
 const NAVIGATION: Navigation = [
   {
@@ -86,32 +56,47 @@ export default function DashboardLayoutBasic(props: DemoProps) {
   const { window } = props;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {user} = useUser()
+  const {first_name, last_name, email} = user
 
   const [session, setSession] = React.useState<Session | null>({
     user: {
-      name: "Bharat Kashyap",
-      email: "bharatkashyap@outlook.com",
-      image: "https://avatars.githubusercontent.com/u/19550456",
+      name: ``,
+      email: "",
+      image: "",
     },
   });
 
+
+  useEffect(() => {
+    setSession({
+      user: {
+        name: `${first_name} ${last_name}`,
+        email: email,
+        image: "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg",
+      }
+    })
+  },[email, first_name, last_name])
+
+
+
   const authentication = React.useMemo(() => {
     return {
-      signIn: () => {
+      signIn : () => {
         setSession({
           user: {
-            name: "Bharat Kashyap",
-            email: "bharatkashyap@outlook.com",
-            image: "https://avatars.githubusercontent.com/u/19550456",
-          },
-        });
+            name: `${first_name} ${last_name}`,
+            email: email,
+            image: "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg",
+          }
+        })
       },
       signOut: () => {
         navigate("/");
         dispatch(destroyAuth());
       },
     };
-  }, [dispatch, navigate]);
+  }, [dispatch, email, first_name, last_name, navigate]);
 
   const demoWindow = window !== undefined ? window() : undefined;
 

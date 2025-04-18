@@ -27,23 +27,26 @@ class AuthUtils:
 
 
     def validate_token(self, token: str) -> dict:
-        load_dotenv()
-        secret = os.getenv("JWT_SECRET")
-        algo = os.getenv("JWT_ALGO")
+        try:
+            load_dotenv()
+            secret = os.getenv("JWT_SECRET")
+            algo = os.getenv("JWT_ALGO")
 
-        if not token:
-            raise HTTPException(status_code=409, detail="No authentication token in headers")
+            if not token:
+                raise HTTPException(status_code=409, detail="No authentication token in headers")
 
-        parts = token.split(" ", 1)
+            parts = token.split(" ", 1)
 
-        if len(parts) == 2:
-            prefix, token = parts
-            if prefix != "Bearer":
-                raise HTTPException(status_code=409, detail="Invalid token: missing or incorrect prefix")
+            if len(parts) == 2:
+                prefix, token = parts
+                if prefix != "Bearer":
+                    raise HTTPException(status_code=409, detail="Invalid token: missing or incorrect prefix")
 
-            token = jwt.decode(token, secret, [algo]).get("sub")
+                user = jwt.decode(token, secret, [algo]).get("sub")
 
 
-            return self.where('id',token).find()
+                return user
 
-        raise HTTPException(status_code=409, detail="Invalid token") 
+            raise HTTPException(status_code=409, detail="Invalid token") 
+        except JWTError as e:
+            raise HTTPException(status_code=500, detail=str(e))

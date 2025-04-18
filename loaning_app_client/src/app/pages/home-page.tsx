@@ -12,6 +12,7 @@ import { appDispatch } from "../store/app-store";
 import { useNavigate } from "react-router-dom";
 import { AxiosResponse } from "axios";
 
+
 const HomePage = () => {
   const { setForm, selectedForm, formDatas, setFormDatas } = useFormGen();
   const dispatch: appDispatch = useDispatch();
@@ -53,6 +54,7 @@ const HomePage = () => {
   };
 
   return (
+
     <Box sx={{ padding: "1.5%", height: "50%", width: "50%" }}>
       <DynamicForm formRef={formRef} onSubmit={onSubmit} />
       <Box sx={{ height: "auto", width: "100%", position: "relative" }}>
@@ -85,6 +87,7 @@ const HomePage = () => {
         </Button>
       </Box>
     </Box>
+
   );
 };
 

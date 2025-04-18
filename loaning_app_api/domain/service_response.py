@@ -6,4 +6,4 @@ class ServiceResponse(BaseModel):
     status_code: int = Field(default=200, le=500, gt=100)  
     data: Dict[str, Any] = Field(default_factory=dict)
     message: str = Field(default="message")
-   
+

@@ -29,6 +29,7 @@ const DynamicForm = ({
           ? dayjs(fieldValue as string).toDate()
           : null;
       if (field.component === "text") accu[field.id] = fieldValue as string;
+      if(field.component === "dropdown") accu[field.id] = fieldValue as string;
       return accu;
     },
     {},

@@ -12,16 +12,15 @@ from models import BorrowerAddress
 class AuthController:
     def register(self, form : RegisterForm):
         try:
-            user = session.query(User).filter(User.email == form.email).one_or_none()
-            if user:
-                raise HTTPException(status_code=400, detail="User already exists")
             new_user = User(
                 email=form.email,
                 password=String().hash_string(form.password)  
             )
-           
+            
             session.add(new_user)
-            session.flush()  
+            session.flush()
+            print(f"new user : {new_user.id}")
+
             new_lender = Borrower(
                 user_id=new_user.id,
                 first_name=form.first_name,
@@ -31,7 +30,7 @@ class AuthController:
             )
             
             session.add(new_lender)
-            session.flush()  
+            session.flush()
             lender_address = BorrowerAddress(
                 borrowers_id=new_lender.id,
                 state=form.state,
@@ -42,6 +41,7 @@ class AuthController:
             )
             session.add(lender_address)
             session.commit()
+            
             return new_user.email
         except SQLAlchemyError as e:
             session.rollback() 
@@ -53,7 +53,7 @@ class AuthController:
 
    
             
-    def auth(self, email: str, password: str) -> dict:
+    def auth(self, email: str, password: str) -> any:
         user = session.query(User).filter(User.email == email).one_or_none()
 
         if user:
@@ -61,5 +61,35 @@ class AuthController:
                 return AuthUtils().generate_jwt_token(user)
             
         raise HTTPException(status_code=401, detail="Invalid credentials")
-       
+    
+    def get_user(self, token:str) -> dict:
+        if(token):
+            user_id = AuthUtils().validate_token(token)
+            user = (
+                session.query(User.email, Borrower.first_name, Borrower.last_name, Borrower.middle_name,
+                                Borrower.birth_date, BorrowerAddress)
+                                .join(Borrower, Borrower.user_id == User.id)
+                                .join(BorrowerAddress, BorrowerAddress.borrowers_id == Borrower.id)
+                                .filter(User.id == user_id)
+                                .one_or_none()
+            )
+            if(user):
+                email, first_name, last_name, middle_name, birth_date, address = user
+                return {
+                    "email": email,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "middle_name": middle_name,
+                    "birth_date": str(birth_date), 
+                    "address": {
+                        "street": address.street,
+                        "city": address.city,
+                        "province": address.state,
+                        "street" : address.street,
+                        "home_number" : address.home_number,
+                        "land_mark" : address.landmark
+                    }
+                }
+        raise HTTPException(status_code=401, detail="Invalid Request")
+
         

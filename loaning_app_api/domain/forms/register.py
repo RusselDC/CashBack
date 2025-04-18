@@ -1,7 +1,10 @@
 from pydantic import BaseModel, Field, EmailStr, field_validator
 from datetime import date, timedelta
 from typing import Optional
-
+from models import User
+from core.database.base_class import session
+from sqlalchemy.exc import SQLAlchemyError 
+from fastapi import HTTPException
 
 class RegisterForm(BaseModel):
     email: EmailStr = Field(description="email for your account")
@@ -26,3 +29,17 @@ class RegisterForm(BaseModel):
             if value > min_date:
                 raise ValueError("Birth date must be more than 21 years ago.")
         return value
+    
+    @field_validator("email")
+    @classmethod
+    def unique_email(cls, value: EmailStr) -> Optional[EmailStr]:
+        try:
+            user = session.query(User).filter(User.email == value).one_or_none()
+            if user:
+                raise ValueError("Email has already been used")
+            return value
+        except SQLAlchemyError as e:
+            raise HTTPException(status_code=500, detail="Database error occurred")
+        except Exception as e:
+            print(e)
+            raise HTTPException(status_code=422, detail=str(e))

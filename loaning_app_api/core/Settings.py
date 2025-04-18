@@ -3,6 +3,10 @@ from typing import Optional
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    APP_NAME : str = "CashBack"
+    
+    
+    
     DB_HOST : str
     DB_PORT : str
     DB_NAME : str

@@ -23,7 +23,7 @@ const BorrowerAddress: FormFields[] = [
     width: 12,
   },
   {
-    id: "baranggays",
+    id: "baranggay",
     label: "Baranggay",
     parentAddress: "citiesDD",
     validation: Yup.string().required("Baranggay is required"),
@@ -32,14 +32,14 @@ const BorrowerAddress: FormFields[] = [
     width: 12,
   },
   {
-    id : "houseNumber",
+    id : "home_number",
     label : "House Number",
     component : "text",
     width : 12,
     validation : Yup.number().label("House Number").typeError(({label, value}) => `${label} must be a ${value}`).required(),
   },
   {
-    id : "landMark",
+    id : "land_mark",
     label : "Land Mark",
     component : "text",
     width : 12,

@@ -31,7 +31,7 @@ export const LoginConfig: FormConfigs<
   fields: LoginFields,
   onSubmit: async (data) => {
     try {
-      const url = "http://127.0.0.1:8000/auth";
+      const url = "http://127.0.0.1:8000/user/auth";
       const response = await axios.post(url, data);
       return response;
     } catch (error: unknown) {
